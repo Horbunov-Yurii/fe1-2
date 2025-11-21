@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 1100px;
+  margin: 0 auto;
+  outline: 1px solid red;
+  padding: 0 15px;
+}
+
+.js-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.item {
+  flex-basis: calc((100% - 60px) / 3);
+  outline: 1px solid gray;
+  background-color: gainsboro;
+}
+
+.image{
+    width: 100%;
+    display: block;
+    height: 300px;
+}
+
+.item-span{
+    font-size: 50px;
+    color: red;
+    display: block;
+}

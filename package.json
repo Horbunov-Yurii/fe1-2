@@ -1,0 +1,23 @@
+{
+  "name": "fe1-2",
+  "version": "1.0.0",
+  "description": "",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "dev": "npx parcel src/index.html",
+    "build": "parcel build src/index.html --public-url /fe1-2/",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "server": "npx json-server ice-data.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.16.1"
+  },
+  "dependencies": {
+    "gh-pages": "^6.3.0",
+    "json-server": "^1.0.0-beta.3"
+  }
+}
