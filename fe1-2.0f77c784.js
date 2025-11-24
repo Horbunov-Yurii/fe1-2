@@ -716,10 +716,26 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"2R06K":[function(require,module,exports,__globalThis) {
 var _getApi = require("./api/getApi");
 var _createItem = require("./makup/create-item");
+var _open = require("./modal/open");
+(0, _open.openModal)();
 const listEl = document.querySelector(".js-list");
 (0, _getApi.getIceApi)().then((res)=>listEl.innerHTML = (0, _createItem.createItemsMarkup)(res));
+const formRef = document.querySelector(".modal_form");
+formRef.addEventListener("submit", (evt)=>{
+    evt.preventDefault();
+    const { name, calories, prise, desk, link } = evt.target.elements;
+    const data = {
+        name: name.value.trim(),
+        calories: calories.value.trim(),
+        prise: prise.value.trim(),
+        desk: desk.value.trim(),
+        link: link.value.trim()
+    };
+    formRef.reset();
+    console.log(data);
+});
 
-},{"./api/getApi":"l78Fw","./makup/create-item":"g65oS"}],"l78Fw":[function(require,module,exports,__globalThis) {
+},{"./api/getApi":"l78Fw","./makup/create-item":"g65oS","./modal/open":"bIQfA"}],"l78Fw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getIceApi", ()=>getIceApi);
@@ -768,11 +784,24 @@ const createItemsMarkup = (array)=>{
     <img src="${image}" alt="${title}" class="image">
 <h2 class="title">${title}</h2>
 <p class"calories">${calories}</p>
-<p class"description"${description}</p>
+<p class"description">${description}</p>
 <p class"price">${price}</p>
 </li>`;
     }).join("");
     return items;
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bIQfA":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "openModal", ()=>openModal);
+const openModalBtn = document.querySelector(".open_modal");
+const openModal = ()=>{
+    openModalBtn.addEventListener("click", ()=>{
+        const backdrop = document.querySelector(".bakdrop");
+        backdrop.style.opacity = "1";
+        backdrop.style.pointerEvents = "auto";
+    });
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["7wZbQ","2R06K"], "2R06K", "parcelRequirea7f3", {})
