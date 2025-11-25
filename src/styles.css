@@ -10,29 +10,73 @@
   padding: 0 15px;
 }
 
+
 .js-list {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; 
+    padding: 30px;
+    list-style: none;
+    margin: 0 auto;
 }
+
 
 .item {
   flex-basis: calc((100% - 60px) / 3);
-  outline: 1px solid gray;
-  background-color: gainsboro;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;       
 }
 
-.image{
+.item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.2);
+}
+
+
+.item-span {
+    font-size: 15px;
+    background: #eee;
+    padding: 6px 10px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    color: #555;
+}
+
+
+.image {
     width: 100%;
-    display: block;
-    height: 300px;
+    height: 260px;               
+    border-radius: 18px;
+    margin-bottom: 18px;    
 }
 
-.item-span{
-    font-size: 50px;
-    color: red;
-    display: block;
+
+.title {
+    font-size: 24px;        
+    font-weight: 700;
+    margin-bottom: 14px;     
+    color: #333;
+}
+
+.calories,
+.description,
+.price {
+    font-size: 18px;       
+    color: #444;
+    margin-bottom: 10px; 
+}    
+
+.price {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e67e22;
+    margin-top: 12px;
 }
 
 .open_modal {
@@ -49,9 +93,6 @@
   margin-top: 10px;
 }
 
-.description{
-  background-color: red;
-}
 
 .bakdrop {
   position: fixed;
