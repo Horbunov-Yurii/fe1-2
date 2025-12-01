@@ -1,12 +1,12 @@
 {
   "ice-cream": [
     {
-      "id": "1",
-      "title": "Ванільне морозиво",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/I_scream_You_Scream_%28Unsplash%29.jpg/250px-I_scream_You_Scream_%28Unsplash%29.jpg",
-      "price": 45,
+      "title": "Ванільне",
       "calories": 180,
-      "description": "Класичне ніжне ванільне морозиво зі свіжих вершків."
+      "price": 45,
+      "description": "Класичне ніжне ванільне морозиво зі свіжих вершків.",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/I_scream_You_Scream_%28Unsplash%29.jpg/250px-I_scream_You_Scream_%28Unsplash%29.jpg",
+      "id": "1"
     },
     {
       "id": "2",
@@ -73,12 +73,20 @@
       "description": "Екзотичний смак стиглого манго з легкою кислинкою."
     },
     {
-      "id": "62cb",
+      "id": "5196",
+      "title": "пломбір",
+      "calories": 333,
+      "price": 70,
+      "description": "смачне",
+      "image": "https://lemix.com.ua/image/cache/catalog/icecream/icecream-plombir-600x600.jpg"
+    },
+    {
+      "id": "08e5",
       "title": "каштан",
-      "calories": 300,
-      "price": 50,
-      "description": "супер",
-      "image": "https://khladoprom.com/assets/cache_image/uploads/brands/kashtan-2023/2023_Kashtan_ESK_CH_543x526_543x526_71e.png"
+      "calories": 333,
+      "price": 222,
+      "description": "смачне",
+      "image": "https://lemix.com.ua/image/cache/catalog/icecream/icecream-plombir-600x600.jpg"
     }
   ]
 }

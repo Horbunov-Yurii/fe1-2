@@ -2,11 +2,14 @@ import { getIceApi } from "./api/getApi";
 import { postIceApi } from "./api/postIsApi";
 import { createItemsMarkup } from "./makup/create-item";
 import { delIceApi } from "./api/deliceApi";
+import { updateIceApi } from "./api/updateIceApi";
 
 const listEl = document.querySelector(".js-list");
 const formRef = document.querySelector(".modal_form");
 const backdrop = document.querySelector(".bakdrop");
 const openBtn = document.querySelector(".open_modal");
+
+let editCardId = null;//якщо тут null то додаємо картку, якщо число то будемо редагувати
 
 function openModal() {
   backdrop.style.opacity = "1";
@@ -18,7 +21,11 @@ function closeModal() {
   backdrop.style.pointerEvents = "none";
 }
 
-openBtn.addEventListener("click", openModal);
+openBtn.addEventListener("click", () => {
+  editCardId = null;
+  formRef.reset()// очищає поля форми
+  openModal()
+});
 
 // submit form
 formRef.addEventListener("submit", (evt) => {
@@ -34,13 +41,22 @@ formRef.addEventListener("submit", (evt) => {
     image: image.value.trim(),
   };
 
-  postIceApi(data)
-    .then(getIceApi)
-    .then((res) => {
-      listEl.innerHTML = createItemsMarkup(res);
-      formRef.reset();
-      closeModal();
-    });
+  if (editCardId === null) {
+     postIceApi(data)
+       .then(getIceApi)
+       .then((res) => {
+         listEl.innerHTML = createItemsMarkup(res);
+         formRef.reset();
+         closeModal();
+       });
+    return;
+  };
+  updateIceApi(editCardId, data).then(() => getIceApi()).then(res => {
+    listEl.innerHTML = createItemsMarkup(res);
+    formRef.reset()
+    closeModal()
+  })
+ 
 });
 
 // delete card
@@ -54,6 +70,29 @@ listEl.addEventListener("click", (event) => {
         listEl.innerHTML = createItemsMarkup(res);
       });
   }
+
+if (event.target.dataset.action === "Edit") {
+  const idItems = event.target.closest("li").id; // string
+
+  getIceApi()
+    .then((res) => {
+      const card = res.find((el) => el.id == idItems); // знайдемо по id
+      if (!card) return; // безпечна перевірка
+
+      formRef.elements.title.value = card.title || "";
+      formRef.elements.calories.value = card.calories || "";
+      formRef.elements.price.value = card.price || "";
+      formRef.elements.description.value = card.description || "";
+      formRef.elements.image.value = card.image || "";
+
+      editCardId = card.id; // тепер редагуємо саме цю картку
+      openModal();
+    })
+    .catch((err) => {
+      console.error("Помилка при отриманні даних:", err);
+    });
+}
+
 });
 
 // initial load
