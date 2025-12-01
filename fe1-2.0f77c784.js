@@ -715,27 +715,54 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"2R06K":[function(require,module,exports,__globalThis) {
 var _getApi = require("./api/getApi");
+var _postIsApi = require("./api/postIsApi");
 var _createItem = require("./makup/create-item");
-var _open = require("./modal/open");
-(0, _open.openModal)();
+var _deliceApi = require("./api/deliceApi");
 const listEl = document.querySelector(".js-list");
-(0, _getApi.getIceApi)().then((res)=>listEl.innerHTML = (0, _createItem.createItemsMarkup)(res));
 const formRef = document.querySelector(".modal_form");
+const backdrop = document.querySelector(".bakdrop");
+const openBtn = document.querySelector(".open_modal");
+function openModal() {
+    backdrop.style.opacity = "1";
+    backdrop.style.pointerEvents = "auto";
+}
+function closeModal() {
+    backdrop.style.opacity = "0";
+    backdrop.style.pointerEvents = "none";
+}
+openBtn.addEventListener("click", openModal);
+// submit form
 formRef.addEventListener("submit", (evt)=>{
     evt.preventDefault();
-    const { name, calories, prise, desk, link } = evt.target.elements;
+    const { title, calories, price, description, image } = evt.target.elements;
     const data = {
-        name: name.value.trim(),
-        calories: calories.value.trim(),
-        prise: prise.value.trim(),
-        desk: desk.value.trim(),
-        link: link.value.trim()
+        title: title.value.trim(),
+        calories: Number(calories.value.trim()),
+        price: Number(price.value.trim()),
+        description: description.value.trim(),
+        image: image.value.trim()
     };
-    formRef.reset();
-    console.log(data);
+    (0, _postIsApi.postIceApi)(data).then((0, _getApi.getIceApi)).then((res)=>{
+        listEl.innerHTML = (0, _createItem.createItemsMarkup)(res);
+        formRef.reset();
+        closeModal();
+    });
+});
+// delete card
+listEl.addEventListener("click", (event)=>{
+    if (event.target.dataset.action === "Delete") {
+        const itemId = event.target.closest("li").id;
+        (0, _deliceApi.delIceApi)(itemId).then((0, _getApi.getIceApi)).then((res)=>{
+            listEl.innerHTML = (0, _createItem.createItemsMarkup)(res);
+        });
+    }
+});
+// initial load
+(0, _getApi.getIceApi)().then((res)=>{
+    listEl.innerHTML = (0, _createItem.createItemsMarkup)(res);
 });
 
-},{"./api/getApi":"l78Fw","./makup/create-item":"g65oS","./modal/open":"bIQfA"}],"l78Fw":[function(require,module,exports,__globalThis) {
+},{"./api/getApi":"l78Fw","./api/postIsApi":"jOZFT","./makup/create-item":"g65oS","./api/deliceApi":"6NrLP"}],"l78Fw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getIceApi", ()=>getIceApi);
@@ -773,35 +800,49 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"g65oS":[function(require,module,exports,__globalThis) {
+},{}],"jOZFT":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "postIceApi", ()=>postIceApi);
+const postIceApi = (icecrem)=>{
+    const options = {
+        method: "POST",
+        body: JSON.stringify(icecrem),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+    return fetch("http://localhost:3000/ice-cream", options).then((res)=>res.json());
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"g65oS":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "createItemsMarkup", ()=>createItemsMarkup);
 const createItemsMarkup = (array)=>{
     const items = array.map(({ id, calories, description, image, price, title })=>{
-        return `<li class="item">
-    <span class"item-span">${id}</span>
+        return `<li class="item" id="${id}">
+    <span class="item-span">${id}</span>
     <img src="${image}" alt="${title}" class="image">
 <h2 class="title">${title}</h2>
-<p class"calories">${calories}</p>
-<p class"description">${description}</p>
-<p class"price">${price}</p>
+<p class="calories">${calories}</p>
+<p class="description">${description}</p>
+<p class="price">${price}</p>
+<button type="button" data-action="Delete">Delete It</button>
+<button type="button" data-action="Edit">Edit this card</button>
 </li>`;
     }).join("");
     return items;
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"bIQfA":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6NrLP":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "openModal", ()=>openModal);
-const openModalBtn = document.querySelector(".open_modal");
-const openModal = ()=>{
-    openModalBtn.addEventListener("click", ()=>{
-        const backdrop = document.querySelector(".bakdrop");
-        backdrop.style.opacity = "1";
-        backdrop.style.pointerEvents = "auto";
-    });
+parcelHelpers.export(exports, "delIceApi", ()=>delIceApi);
+const delIceApi = (id)=>{
+    return fetch(`http://localhost:3000/ice-cream/${id}`, {
+        method: "DELETE"
+    }).then((res)=>res.json());
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["7wZbQ","2R06K"], "2R06K", "parcelRequirea7f3", {})
