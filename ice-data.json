@@ -73,12 +73,12 @@
       "description": "Екзотичний смак стиглого манго з легкою кислинкою."
     },
     {
-      "id": "10",
-      "title": "Кокосове морозиво",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYKvORhFhJsR9Z-B0KhVAXB2gObnNwaM7i1Q&s",
-      "price": 57,
-      "calories": 185,
-      "description": "Тропічний кокосовий смак та ніжна вершкова консистенція."
+      "id": "62cb",
+      "title": "каштан",
+      "calories": 300,
+      "price": 50,
+      "description": "супер",
+      "image": "https://khladoprom.com/assets/cache_image/uploads/brands/kashtan-2023/2023_Kashtan_ESK_CH_543x526_543x526_71e.png"
     }
   ]
 }

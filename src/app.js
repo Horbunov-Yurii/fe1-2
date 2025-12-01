@@ -3,9 +3,6 @@ import { postIceApi } from "./api/postIsApi";
 import { createItemsMarkup } from "./makup/create-item";
 import { delIceApi } from "./api/deliceApi";
 
-// import { openModal } from "./modal/open";
-
-// openModal();
 const listEl = document.querySelector(".js-list");
 const formRef = document.querySelector(".modal_form");
 const backdrop = document.querySelector(".bakdrop");
@@ -23,22 +20,22 @@ function closeModal() {
 
 openBtn.addEventListener("click", openModal);
 
-getIceApi().then((res) => (listEl.innerHTML = createItemsMarkup(res)));
-
+// submit form
 formRef.addEventListener("submit", (evt) => {
   evt.preventDefault();
+
   const { title, calories, price, description, image } = evt.target.elements;
+
   const data = {
     title: title.value.trim(),
-    calories: calories.value.trim(),
-    price: price.value.trim(),
+    calories: Number(calories.value.trim()),
+    price: Number(price.value.trim()),
     description: description.value.trim(),
     image: image.value.trim(),
   };
-  let recvest;
-  recvest = postIceApi(data);
-  recvest
-    .then(() => getIceApi())
+
+  postIceApi(data)
+    .then(getIceApi)
     .then((res) => {
       listEl.innerHTML = createItemsMarkup(res);
       formRef.reset();
@@ -46,12 +43,20 @@ formRef.addEventListener("submit", (evt) => {
     });
 });
 
+// delete card
 listEl.addEventListener("click", (event) => {
   if (event.target.dataset.action === "Delete") {
-    const itemId = event.target.closest("LI").id;
-    console.log(itemId);
-    delIceApi(itemId).then(() => getIceApi()).then((res) => {
-        listEl.innerHTML =  createItemsMarkup(res);
-    });
+    const itemId = event.target.closest("li").id;
+
+    delIceApi(itemId)
+      .then(getIceApi)
+      .then((res) => {
+        listEl.innerHTML = createItemsMarkup(res);
+      });
   }
+});
+
+// initial load
+getIceApi().then((res) => {
+  listEl.innerHTML = createItemsMarkup(res);
 });
