@@ -1,0 +1,11 @@
+let e=async()=>(await fetch("http://localhost:3001/ice-cream")).json(),t=async e=>{let t={method:"POST",body:JSON.stringify(e),headers:{"Content-Type":"application/json"}};return(await fetch("http://localhost:3001/ice-cream",t)).json()},a=e=>e.map(({id:e,calories:t,description:a,image:i,price:l,title:n})=>`<li class="item" id="${e}">
+    <span class="item-span">${e}</span>
+    <img src="${i}" alt="${n}" class="image">
+<h2 class="title">${n}</h2>
+<p class="calories">${t}</p>
+<p class="description">${a}</p>
+<p class="price">${l}</p>
+<button type="button" data-action="Delete">Delete It</button>
+<button type="button" data-action="Edit">Edit this card</button>
+</li>`).join(""),i=async e=>(await fetch(`http://localhost:3001/ice-cream/${e}`,{method:"DELETE"})).json(),l=async(e,t)=>{let a={method:"PUT",body:JSON.stringify(t),headers:{"Content-Type":"application/json"}};return(await fetch(`http://localhost:3001/ice-cream/${e}`,a)).json()},n=document.querySelector(".js-list"),s=document.querySelector(".modal_form"),c=document.querySelector(".bakdrop"),o=document.querySelector(".open_modal"),r=null;function d(){c.style.opacity="1",c.style.pointerEvents="auto"}o.addEventListener("click",()=>{r=null,s.reset(),d()}),s.addEventListener("submit",async i=>{i.preventDefault();let{title:o,calories:d,price:p,description:m,image:u}=i.target.elements,y={title:o.value.trim(),calories:Number(d.value.trim()),price:Number(p.value.trim()),description:m.value.trim(),image:u.value.trim()};try{null===r?await t(y):await l(r,y);let i=await e();n.innerHTML=a(i),s.reset(),c.style.opacity="0",c.style.pointerEvents="none"}catch(e){console.log(e)}}),n.addEventListener("click",async t=>{if("Delete"===t.target.dataset.action){let l=t.target.closest("li").id;await i(l),n.innerHTML=a(await e())}if("Edit"===t.target.dataset.action){let a=t.target.closest("li").id,i=(await e()).find(e=>e.id==a);if(!i)return;s.elements.title.value=i.title||"",s.elements.calories.value=i.calories||"",s.elements.price.value=i.price||"",s.elements.description.value=i.description||"",s.elements.image.value=i.image||"",r=i.id,d()}}),(async()=>{try{let t=await e();n.innerHTML=a(t)}catch(e){console.log(e)}})();
+//# sourceMappingURL=fe1-2.1381636f.js.map

@@ -718,10 +718,12 @@ var _getApi = require("./api/getApi");
 var _postIsApi = require("./api/postIsApi");
 var _createItem = require("./makup/create-item");
 var _deliceApi = require("./api/deliceApi");
+var _updateIceApi = require("./api/updateIceApi");
 const listEl = document.querySelector(".js-list");
 const formRef = document.querySelector(".modal_form");
 const backdrop = document.querySelector(".bakdrop");
 const openBtn = document.querySelector(".open_modal");
+let editCardId = null; //якщо тут null то додаємо картку, якщо число то будемо редагувати
 function openModal() {
     backdrop.style.opacity = "1";
     backdrop.style.pointerEvents = "auto";
@@ -730,9 +732,13 @@ function closeModal() {
     backdrop.style.opacity = "0";
     backdrop.style.pointerEvents = "none";
 }
-openBtn.addEventListener("click", openModal);
+openBtn.addEventListener("click", ()=>{
+    editCardId = null;
+    formRef.reset(); // очищає поля форми
+    openModal();
+});
 // submit form
-formRef.addEventListener("submit", (evt)=>{
+formRef.addEventListener("submit", async (evt)=>{
     evt.preventDefault();
     const { title, calories, price, description, image } = evt.target.elements;
     const data = {
@@ -742,32 +748,86 @@ formRef.addEventListener("submit", (evt)=>{
         description: description.value.trim(),
         image: image.value.trim()
     };
-    (0, _postIsApi.postIceApi)(data).then((0, _getApi.getIceApi)).then((res)=>{
-        listEl.innerHTML = (0, _createItem.createItemsMarkup)(res);
+    try {
+        if (editCardId === null) await (0, _postIsApi.postIceApi)(data);
+        else await (0, _updateIceApi.updateIceApi)(editCardId, data);
+        const updateList = await (0, _getApi.getIceApi)();
+        listEl.innerHTML = (0, _createItem.createItemsMarkup)(updateList);
         formRef.reset();
         closeModal();
-    });
+    } catch (error) {
+        console.log(error);
+    }
+// if (editCardId === null) {
+//    postIceApi(data)
+//      .then(getIceApi)
+//      .then((res) => {
+//        listEl.innerHTML = createItemsMarkup(res);
+//        formRef.reset();
+//        closeModal();
+//      });
+//   return;
+// };
+// updateIceApi(editCardId, data).then(() => getIceApi()).then(res => {
+//   listEl.innerHTML = createItemsMarkup(res);
+//   formRef.reset()
+//   closeModal()
+// })
 });
 // delete card
-listEl.addEventListener("click", (event)=>{
+listEl.addEventListener("click", async (event)=>{
     if (event.target.dataset.action === "Delete") {
         const itemId = event.target.closest("li").id;
-        (0, _deliceApi.delIceApi)(itemId).then((0, _getApi.getIceApi)).then((res)=>{
-            listEl.innerHTML = (0, _createItem.createItemsMarkup)(res);
-        });
+        await (0, _deliceApi.delIceApi)(itemId);
+        const res = await (0, _getApi.getIceApi)();
+        listEl.innerHTML = (0, _createItem.createItemsMarkup)(res);
+    // .then(getIceApi)
+    // .then((res) => {
+    //   listEl.innerHTML = createItemsMarkup(res);
+    // });
+    }
+    if (event.target.dataset.action === "Edit") {
+        const idItems = event.target.closest("li").id; // string
+        const res = await (0, _getApi.getIceApi)();
+        const card = res.find((el)=>el.id == idItems); // знайдемо по id
+        if (!card) return; // безпечна перевірка
+        formRef.elements.title.value = card.title || "";
+        formRef.elements.calories.value = card.calories || "";
+        formRef.elements.price.value = card.price || "";
+        formRef.elements.description.value = card.description || "";
+        formRef.elements.image.value = card.image || "";
+        editCardId = card.id; // тепер редагуємо саме цю картку
+        openModal();
     }
 });
 // initial load
-(0, _getApi.getIceApi)().then((res)=>{
-    listEl.innerHTML = (0, _createItem.createItemsMarkup)(res);
-});
+// getIceApi().then((res) => {
+//   listEl.innerHTML = createItemsMarkup(res);
+// });
+// async function load() {
+//   const data = await getIceApi();
+//   listEl.innerHTML = createItemsMarkup(data);
+// }
+// load()
+(async ()=>{
+    try {
+        const data = await (0, _getApi.getIceApi)();
+        listEl.innerHTML = (0, _createItem.createItemsMarkup)(data);
+    } catch (error) {
+        console.log(error);
+    }
+})();
 
-},{"./api/getApi":"l78Fw","./api/postIsApi":"jOZFT","./makup/create-item":"g65oS","./api/deliceApi":"6NrLP"}],"l78Fw":[function(require,module,exports,__globalThis) {
+},{"./api/getApi":"l78Fw","./api/postIsApi":"jOZFT","./makup/create-item":"g65oS","./api/deliceApi":"6NrLP","./api/updateIceApi":"hX8EM"}],"l78Fw":[function(require,module,exports,__globalThis) {
+//  export const getIceApi = () => {
+//   return fetch("http://localhost:3000/ice-cream").then((res) => res.json());
+// }
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getIceApi", ()=>getIceApi);
-const getIceApi = ()=>{
-    return fetch("http://localhost:3000/ice-cream").then((res)=>res.json());
+const getIceApi = async ()=>{
+    const res = await fetch("http://localhost:3001/ice-cream");
+    return res.json();
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnFvT":[function(require,module,exports,__globalThis) {
@@ -801,10 +861,22 @@ exports.export = function(dest, destName, get) {
 };
 
 },{}],"jOZFT":[function(require,module,exports,__globalThis) {
+// export const postIceApi = (icecrem) => {
+//   const options = {
+//     method: "POST",
+//     body: JSON.stringify(icecrem),
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   };
+//   return fetch("http://localhost:3000/ice-cream", options).then((res) =>
+//     res.json()
+//   );
+// };
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "postIceApi", ()=>postIceApi);
-const postIceApi = (icecrem)=>{
+const postIceApi = async (icecrem)=>{
     const options = {
         method: "POST",
         body: JSON.stringify(icecrem),
@@ -812,7 +884,8 @@ const postIceApi = (icecrem)=>{
             "Content-Type": "application/json"
         }
     };
-    return fetch("http://localhost:3000/ice-cream", options).then((res)=>res.json());
+    const res = await fetch("http://localhost:3001/ice-cream", options);
+    return res.json();
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"g65oS":[function(require,module,exports,__globalThis) {
@@ -836,13 +909,48 @@ const createItemsMarkup = (array)=>{
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6NrLP":[function(require,module,exports,__globalThis) {
+// export const delIceApi = (id) => {
+//   return fetch(`http://localhost:3000/ice-cream/${id}`, {
+//     method: "DELETE",
+//   }).then((res) => res.json());
+// };
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "delIceApi", ()=>delIceApi);
-const delIceApi = (id)=>{
-    return fetch(`http://localhost:3000/ice-cream/${id}`, {
+const delIceApi = async (id)=>{
+    const res = await fetch(`http://localhost:3001/ice-cream/${id}`, {
         method: "DELETE"
-    }).then((res)=>res.json());
+    });
+    const date = res.json();
+    return date;
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"hX8EM":[function(require,module,exports,__globalThis) {
+// export const updateIceApi = (id, icecrem) => {
+//   const options = {
+//     method: "PUT",
+//     body: JSON.stringify(icecrem),
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   };
+//   return fetch(`http://localhost:3000/ice-cream/${id}`, options).then((res) =>
+//     res.json()
+//   );
+// };
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateIceApi", ()=>updateIceApi);
+const updateIceApi = async (id, icecrem)=>{
+    const options = {
+        method: "PUT",
+        body: JSON.stringify(icecrem),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+    const res = await fetch(`http://localhost:3001/ice-cream/${id}`, options);
+    return res.json();
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["7wZbQ","2R06K"], "2R06K", "parcelRequirea7f3", {})
