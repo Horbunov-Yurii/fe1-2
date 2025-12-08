@@ -9,7 +9,7 @@ const formRef = document.querySelector(".modal_form");
 const backdrop = document.querySelector(".bakdrop");
 const openBtn = document.querySelector(".open_modal");
 
-let editCardId = null;//якщо тут null то додаємо картку, якщо число то будемо редагувати
+let editCardId = null; //якщо тут null то додаємо картку, якщо число то будемо редагувати
 
 function openModal() {
   backdrop.style.opacity = "1";
@@ -23,12 +23,12 @@ function closeModal() {
 
 openBtn.addEventListener("click", () => {
   editCardId = null;
-  formRef.reset()// очищає поля форми
-  openModal()
+  formRef.reset(); // очищає поля форми
+  openModal();
 });
 
 // submit form
-formRef.addEventListener("submit", (evt) => {
+formRef.addEventListener("submit", async (evt) => {
   evt.preventDefault();
 
   const { title, calories, price, description, image } = evt.target.elements;
@@ -41,22 +41,36 @@ formRef.addEventListener("submit", (evt) => {
     image: image.value.trim(),
   };
 
-  if (editCardId === null) {
-     postIceApi(data)
-       .then(getIceApi)
-       .then((res) => {
-         listEl.innerHTML = createItemsMarkup(res);
-         formRef.reset();
-         closeModal();
-       });
-    return;
-  };
-  updateIceApi(editCardId, data).then(() => getIceApi()).then(res => {
-    listEl.innerHTML = createItemsMarkup(res);
-    formRef.reset()
-    closeModal()
-  })
- 
+  try {
+    if (editCardId === null) {
+      await postIceApi(data);
+    } else {
+      await updateIceApi(editCardId, data);
+    }
+
+    const updateList = await getIceApi();
+    listEl.innerHTML = createItemsMarkup(updateList);
+    formRef.reset();
+    closeModal();
+  } catch (error) {
+    console.log(error);
+  }
+
+  // if (editCardId === null) {
+  //    postIceApi(data)
+  //      .then(getIceApi)
+  //      .then((res) => {
+  //        listEl.innerHTML = createItemsMarkup(res);
+  //        formRef.reset();
+  //        closeModal();
+  //      });
+  //   return;
+  // };
+  // updateIceApi(editCardId, data).then(() => getIceApi()).then(res => {
+  //   listEl.innerHTML = createItemsMarkup(res);
+  //   formRef.reset()
+  //   closeModal()
+  // })
 });
 
 // delete card
@@ -71,28 +85,27 @@ listEl.addEventListener("click", (event) => {
       });
   }
 
-if (event.target.dataset.action === "Edit") {
-  const idItems = event.target.closest("li").id; // string
+  if (event.target.dataset.action === "Edit") {
+    const idItems = event.target.closest("li").id; // string
 
-  getIceApi()
-    .then((res) => {
-      const card = res.find((el) => el.id == idItems); // знайдемо по id
-      if (!card) return; // безпечна перевірка
+    getIceApi()
+      .then((res) => {
+        const card = res.find((el) => el.id == idItems); // знайдемо по id
+        if (!card) return; // безпечна перевірка
 
-      formRef.elements.title.value = card.title || "";
-      formRef.elements.calories.value = card.calories || "";
-      formRef.elements.price.value = card.price || "";
-      formRef.elements.description.value = card.description || "";
-      formRef.elements.image.value = card.image || "";
+        formRef.elements.title.value = card.title || "";
+        formRef.elements.calories.value = card.calories || "";
+        formRef.elements.price.value = card.price || "";
+        formRef.elements.description.value = card.description || "";
+        formRef.elements.image.value = card.image || "";
 
-      editCardId = card.id; // тепер редагуємо саме цю картку
-      openModal();
-    })
-    .catch((err) => {
-      console.error("Помилка при отриманні даних:", err);
-    });
-}
-
+        editCardId = card.id; // тепер редагуємо саме цю картку
+        openModal();
+      })
+      .catch((err) => {
+        console.error("Помилка при отриманні даних:", err);
+      });
+  }
 });
 
 // initial load

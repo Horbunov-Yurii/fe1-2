@@ -73,20 +73,12 @@
       "description": "Екзотичний смак стиглого манго з легкою кислинкою."
     },
     {
-      "id": "5196",
-      "title": "пломбір",
-      "calories": 333,
-      "price": 70,
-      "description": "смачне",
-      "image": "https://lemix.com.ua/image/cache/catalog/icecream/icecream-plombir-600x600.jpg"
-    },
-    {
-      "id": "08e5",
       "title": "каштан",
       "calories": 333,
-      "price": 222,
+      "price": 180,
       "description": "смачне",
-      "image": "https://lemix.com.ua/image/cache/catalog/icecream/icecream-plombir-600x600.jpg"
+      "image": "https://lemix.com.ua/image/cache/catalog/icecream/icecream-plombir-600x600.jpg",
+      "id": "08e5"
     }
   ]
 }
