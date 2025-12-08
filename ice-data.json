@@ -9,20 +9,20 @@
       "id": "1"
     },
     {
-      "id": "2",
       "title": "Шоколадне морозиво",
+      "calories": 211,
+      "price": 99,
+      "description": "Насичений шоколадний смак з натуральним какао.",
       "image": "https://lodmar.com.ua/image/cache/catalog/product1/%20%D0%BE%D0%B1%D0%BB%D0%B0%D0%B4%D0%BD%D0%B0%D0%BD%D0%BD%D1%8F/Taylor/%20%D0%B4%D0%BB%D1%8F%20%D0%BC%E2%80%99%D1%8F%D0%BA%D0%BE%D0%B3%D0%BE%20%D0%BC%D0%BE%D1%80%D0%BE%D0%B7%D0%B8%D0%B2%D0%B0%20(%D0%9F%D0%BE%D0%BB%D1%86%D0%BD%D0%B8%D1%86%D1%8F)-600x600.jpg",
-      "price": 50,
-      "calories": 210,
-      "description": "Насичений шоколадний смак з натуральним какао."
+      "id": "2"
     },
     {
-      "id": "3",
       "title": "Полуничне морозиво",
-      "image": "https://lemix.com.ua/image/cache/catalog/icecream/icecream-plombir-600x600.jpg",
+      "calories": 200,
       "price": 47,
-      "calories": 170,
-      "description": "Морозиво з додаванням свіжої полуниці та ягідного пюре."
+      "description": "Морозиво з додаванням свіжої полуниці та ягідного пюре.",
+      "image": "https://lemix.com.ua/image/cache/catalog/icecream/icecream-plombir-600x600.jpg",
+      "id": "3"
     },
     {
       "id": "4",
@@ -65,20 +65,12 @@
       "description": "Ароматні чорниці, свіже ягідне пюре та ніжний смак."
     },
     {
-      "id": "9",
       "title": "Мангове морозиво",
-      "image": "https://rud.ua/uploads/useful_info/content/5cc173d395131.jpg",
-      "price": 60,
       "calories": 195,
-      "description": "Екзотичний смак стиглого манго з легкою кислинкою."
-    },
-    {
-      "title": "каштан",
-      "calories": 333,
-      "price": 180,
-      "description": "смачне",
-      "image": "https://lemix.com.ua/image/cache/catalog/icecream/icecream-plombir-600x600.jpg",
-      "id": "08e5"
+      "price": 60,
+      "description": "Екзотичний смак стиглого манго з легкою кислинкою.",
+      "image": "https://rud.ua/uploads/useful_info/content/5cc173d395131.jpg",
+      "id": "9"
     }
   ]
 }

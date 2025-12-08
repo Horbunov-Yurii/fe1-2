@@ -74,22 +74,24 @@ formRef.addEventListener("submit", async (evt) => {
 });
 
 // delete card
-listEl.addEventListener("click", (event) => {
+listEl.addEventListener("click", async (event) => {
   if (event.target.dataset.action === "Delete") {
     const itemId = event.target.closest("li").id;
 
-    delIceApi(itemId)
-      .then(getIceApi)
-      .then((res) => {
-        listEl.innerHTML = createItemsMarkup(res);
-      });
+    await delIceApi(itemId)
+    const res = await getIceApi()
+    listEl.innerHTML = createItemsMarkup(res);
+      // .then(getIceApi)
+      // .then((res) => {
+      //   listEl.innerHTML = createItemsMarkup(res);
+      // });
   }
+
 
   if (event.target.dataset.action === "Edit") {
     const idItems = event.target.closest("li").id; // string
-
-    getIceApi()
-      .then((res) => {
+    const res = await getIceApi()
+    
         const card = res.find((el) => el.id == idItems); // знайдемо по id
         if (!card) return; // безпечна перевірка
 
@@ -101,14 +103,26 @@ listEl.addEventListener("click", (event) => {
 
         editCardId = card.id; // тепер редагуємо саме цю картку
         openModal();
-      })
-      .catch((err) => {
-        console.error("Помилка при отриманні даних:", err);
-      });
   }
 });
 
 // initial load
-getIceApi().then((res) => {
-  listEl.innerHTML = createItemsMarkup(res);
-});
+// getIceApi().then((res) => {
+//   listEl.innerHTML = createItemsMarkup(res);
+// });
+
+// async function load() {
+//   const data = await getIceApi();
+//   listEl.innerHTML = createItemsMarkup(data);
+// }
+// load()
+
+
+(async () => {
+  try {
+    const data = await getIceApi();
+   listEl.innerHTML = createItemsMarkup(data);
+  } catch (error) {
+    console.log(error);
+  }
+})()

@@ -22,6 +22,6 @@ export const postIceApi = async (icecrem) => {
     },
   };
 
-  const res = await fetch("http://localhost:3000/ice-cream", options)
+  const res = await fetch("http://localhost:3001/ice-cream", options)
   return res.json()
 };

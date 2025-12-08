@@ -21,6 +21,6 @@
      },
    };
 
-   const res = await fetch(`http://localhost:3000/ice-cream/${id}`, options)
+   const res = await fetch(`http://localhost:3001/ice-cream/${id}`, options)
    return res.json();
  };

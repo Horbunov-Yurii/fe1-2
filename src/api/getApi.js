@@ -3,6 +3,6 @@
 // }
 
  export const getIceApi = async() => {
-   const res = await fetch("http://localhost:3000/ice-cream");
+   const res = await fetch("http://localhost:3001/ice-cream");
    return res.json();
  };
